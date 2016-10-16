@@ -1,0 +1,23 @@
+version: '2'
+services:
+  db:
+    image: mongo:3.2
+    restart: always
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-todo
+    image: python-blog
+    depends_on:
+      - db
+    links:
+      - db:docker-mongo-db
+    volumes:
+      - "./docker-workshop-todo:/app"
+    working_dir: /app
+    restart: always
+    expose:
+      - "5000"
+    ports:
+      - "5000:5000"
+    command: python app.py
